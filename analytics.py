@@ -1,4 +1,6 @@
 import pandas as pd
+from pandas import DataFrame, Series
+
 
 def set_status(avg):
     if avg >= 85:
@@ -12,14 +14,14 @@ def load_data(file_path):
     df = pd.read_csv(file_path)
     return df
 
-def add_status(df):
+def add_status(df: DataFrame) -> DataFrame:
     df['average_score'] = df[['math', 'physics', 'english']].mean(axis=1)
 
     df['status'] = df['average_score'].apply(set_status)
 
     return df
 
-def format_stats(stats):
+def format_stats(stats: DataFrame) -> str:
     lines = []
 
     for (grade, status), row in stats.iterrows():
@@ -36,7 +38,7 @@ def format_stats(stats):
     
     return "\n".join(lines)
 
-def format_statuses(series, status):
+def format_statuses(series: Series, status: str) -> str:
     names = []
     for _, value in series.items():
         names.append(
@@ -47,7 +49,7 @@ def format_statuses(series, status):
     
     return "\n".join(names)
 
-def format_top(top):
+def format_top(top: int) -> str:
     if len(top)> 8:
         return "There is only 8 students, choose less number :)"
     lines = []
@@ -64,7 +66,7 @@ def format_top(top):
         )
     return "\n".join(lines)
 
-def group_summary(df):
+def group_summary(df: DataFrame) -> DataFrame:
     df = add_status(df)
     group = df.groupby(["grade", "status"]).agg(
         number_of_students = ('name', 'count'),
@@ -77,8 +79,8 @@ def group_summary(df):
     )
     return group
 
-def top_students(df1: pd.DataFrame, n):
-    if df1.__len__() < n:
+def top_students(df1: DataFrame, n: int) -> Series:
+    if len(df1) < n:
         return "please, enter the correct number"
     df = add_status(df1)
     return df.sort_values(ascending=False, by='average_score').head(n)
