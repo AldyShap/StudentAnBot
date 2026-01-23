@@ -48,17 +48,17 @@ def format_statuses(series, status):
     return "\n".join(names)
 
 def format_top(top):
-    if top.__len__() > 8:
+    if len(top)> 8:
         return "There is only 8 students, choose less number :)"
     lines = []
 
     for _, row in top.iterrows():
         lines.append(
-            f"name: {row["name"]} | status: {row['status']}\n"
+            f"name: {row['name']} | status: {row['status']}\n"
             f"age: {row["age"]:.1f} | Grade: {row['grade']:.1f}\n"
-            f"math score: {row["math"]:.1f} | physics score: {row['physics']:.1f}\n"
-            f"english score: {row["english"]:.1f} | average score: {row['average_score']:.1f}\n"
-            f"given status: {row["status"]}\n"
+            f"math score: {row['math']:.1f} | physics score: {row['physics']:.1f}\n"
+            f"english score: {row['english']:.1f} | average score: {row['average_score']:.1f}\n"
+            f"given status: {row['status']}\n"
             f"{'-' * 25}"
 
         )
