@@ -5,7 +5,7 @@ from aiogram import types
 from aiogram.filters import Command, CommandStart, CommandObject
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.state import State, StatesGroup
-from config import BOT_TOKEN
+from config import BOT_TOKEN # your bot's token
 import analytics as an
 
 
