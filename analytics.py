@@ -3,6 +3,7 @@ from pandas import DataFrame, Series
 
 
 def set_status(avg):
+    # this method set status for each students
     if avg >= 85:
         return "excellent"
     elif avg >= 75:
@@ -11,12 +12,15 @@ def set_status(avg):
         return "bad"
 
 def load_data(file_path):
+    # loading csv file with this method
     df = pd.read_csv(file_path)
     return df
 
 def add_status(df: DataFrame) -> DataFrame:
+    # creating column "average_score" based on average score of three columns
     df['average_score'] = df[['math', 'physics', 'english']].mean(axis=1)
 
+    # creating "status" column
     df['status'] = df['average_score'].apply(set_status)
 
     return df
@@ -39,6 +43,7 @@ def format_stats(stats: DataFrame) -> str:
     return "\n".join(lines)
 
 def format_statuses(series: Series, status: str) -> str:
+    # the method returns names which their statuses equal to a choosen status
     names = []
     for _, value in series.items():
         names.append(
@@ -50,6 +55,7 @@ def format_statuses(series: Series, status: str) -> str:
     return "\n".join(names)
 
 def format_top(top: int) -> str:
+    # returns top n students in csv based on average_score
     if len(top)> 8:
         return "There is only 8 students, choose less number :)"
     lines = []
@@ -67,6 +73,7 @@ def format_top(top: int) -> str:
     return "\n".join(lines)
 
 def group_summary(df: DataFrame) -> DataFrame:
+    # returns dataframe which is grouped by status and grade
     df = add_status(df)
     group = df.groupby(["grade", "status"]).agg(
         number_of_students = ('name', 'count'),
@@ -80,13 +87,14 @@ def group_summary(df: DataFrame) -> DataFrame:
     return group
 
 def top_students(df1: DataFrame, n: int) -> Series:
+    # returns Series of names which are in top n students
     if len(df1) < n:
         return "please, enter the correct number"
     df = add_status(df1)
     return df.sort_values(ascending=False, by='average_score').head(n)
 
 def students_by_status(df1: pd.DataFrame, status):
+    # returns serial of name coloum which have a choosen status
     df1 = add_status(df1)
     df = df1[df1['status'] == status]
     return df['name']
-
