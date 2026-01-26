@@ -1,5 +1,6 @@
 import pandas as pd
 from pandas import DataFrame, Series
+from db import get_all_students
 
 
 def set_status(avg):
@@ -11,10 +12,14 @@ def set_status(avg):
     else:
         return "bad"
 
-def load_data(file_path):
-    # loading csv file with this method
-    df = pd.read_csv(file_path)
-    return df
+# the method converts tuple of the two lists to dataframe 
+def make_dataframe(rows, columns) -> DataFrame:
+    return pd.DataFrame(rows, columns=columns)
+
+async def load_data() -> tuple[list, list]:
+    # getting data from database as tuple of the two lists
+    rows, columns = await get_all_students()
+    return rows, columns
 
 def add_status(df: DataFrame) -> DataFrame:
     # creating column "average_score" based on average score of three columns
@@ -25,6 +30,7 @@ def add_status(df: DataFrame) -> DataFrame:
 
     return df
 
+# the method formats unreadable dataframe to readable text 
 def format_stats(stats: DataFrame) -> str:
     lines = []
 
@@ -32,11 +38,11 @@ def format_stats(stats: DataFrame) -> str:
         lines.append(
             f"📊 *Класс {grade} | Статус: {status}*\n"
             f"👥 Учеников: {int(row['number_of_students'])}\n"
-            f"📈 Средний балл: {row['avg_points']:.1f}\n"
+            f"📈 Средний балл: {row['avg_points']}\n"
             f"📉 Мин / Макс: {row['min_points']} / {row['max_points']}\n"
-            f"🧮 Математика: {row['math_avg']:.1f}\n"
-            f"⚛️ Физика: {row['physics_avg']:.1f}\n"
-            f"📘 Английский: {row['english_avg']:.1f}\n"
+            f"🧮 Математика: {row['math_avg']}\n"
+            f"⚛️ Физика: {row['physics_avg']}\n"
+            f"📘 Английский: {row['english_avg']}\n"
             f"{'─' * 25}"
         )
     
@@ -44,6 +50,8 @@ def format_stats(stats: DataFrame) -> str:
 
 def format_statuses(series: Series, status: str) -> str:
     # the method returns names which their statuses equal to a choosen status
+    if series.empty:
+        return f"No students with status '{status}'"
     names = []
     for _, value in series.items():
         names.append(
@@ -54,18 +62,21 @@ def format_statuses(series: Series, status: str) -> str:
     
     return "\n".join(names)
 
-def format_top(top: int) -> str:
-    # returns top n students in csv based on average_score
-    if len(top)> 8:
-        return "There is only 8 students, choose less number :)"
+# the method formats unreadable dataframe to readable text 
+def format_top(top: DataFrame) -> str:
+    # returns top n students in database based on average_score
+    if isinstance(top, str):
+        return top
+    if top.empty:
+        return "No students found"
     lines = []
 
     for _, row in top.iterrows():
         lines.append(
             f"name: {row['name']} | status: {row['status']}\n"
-            f"age: {row["age"]:.1f} | Grade: {row['grade']:.1f}\n"
-            f"math score: {row['math']:.1f} | physics score: {row['physics']:.1f}\n"
-            f"english score: {row['english']:.1f} | average score: {row['average_score']:.1f}\n"
+            f"age: {row['age']} | Grade: {row['grade']}\n"
+            f"math score: {row['math']} | physics score: {row['physics']}\n"
+            f"english score: {row['english']} | average score: {row['average_score']}\n"
             f"given status: {row['status']}\n"
             f"{'-' * 25}"
 
@@ -88,13 +99,17 @@ def group_summary(df: DataFrame) -> DataFrame:
 
 def top_students(df1: DataFrame, n: int) -> Series:
     # returns Series of names which are in top n students
+    if df1.empty:
+        return f"No students to get top {n}"
+    
     if len(df1) < n:
-        return "please, enter the correct number"
+        return "number is too big or too small, check your number of students"
+    
     df = add_status(df1)
     return df.sort_values(ascending=False, by='average_score').head(n)
 
 def students_by_status(df1: pd.DataFrame, status):
     # returns serial of name coloum which have a choosen status
     df1 = add_status(df1)
-    df = df1[df1['status'] == status]
-    return df['name']
+    filtered = df1[df1['status'] == status]
+    return filtered['name']
