@@ -59,17 +59,16 @@ git clone https://github.com/AldyShap/CVTratejake.git
 cd your-project-path
 
 2️⃣ Создать виртуальное окружение
-bash
-Копировать код
+
 python -m venv .venv
 source .venv/bin/activate  # Linux / Mac
 .venv\Scripts\activate     # Windows
 
 3️⃣ Установить зависимости
+```
 bash
-Копировать код
 pip install -r requirements.txt
-
+```
 4️⃣ Запустить бота
 bash
 Копировать код
@@ -96,3 +95,4 @@ python-dotenv
 👤 Алдияр
 Начинающий backend / Python developer
 Интересы: Python, аналитика данных, боты, backend
+```
