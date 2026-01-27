@@ -94,3 +94,5 @@ python-dotenv
 Начинающий backend / Python developer
 Интересы: Python, аналитика данных, боты, backend
 ```
+
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
