@@ -3,8 +3,7 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram import types
 from aiogram.filters import Command, CommandStart, CommandObject
-from aiogram.types import Message, CallbackQuery
-from aiogram.fsm.state import State, StatesGroup
+from aiogram.types import Message
 from config import BOT_TOKEN # your bot's token
 import analytics as an
 import db
