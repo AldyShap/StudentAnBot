@@ -58,8 +58,8 @@ student-analytics-bot/
 
 ## 1️⃣ Клонировать репозиторий
 ```bash
-git clone https://github.com/AldyShap/CVTratejake.git
-cd your-project-path
+https://github.com/AldyShap/StudentAnBot.git
+cd your/project/path
 ```
 
 ## 2️⃣ Создать виртуальное окружение
